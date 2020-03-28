@@ -1,6 +1,7 @@
 package au.lyrael.killall;
 
 import au.lyrael.killall.command.ListEntityCountCommand;
+import au.lyrael.killall.command.ListEntityDetailsCommand;
 import au.lyrael.killall.command.VerbEntityNameCommand;
 import au.lyrael.killall.utility.MetadataHelper;
 import cpw.mods.fml.common.Mod;
@@ -30,7 +31,7 @@ public class KillAll {
 	public static final String MOD_ID = "killall";
 	public static final String MOD_NAME = "Kill All Command";
 	public static final String MC_VERSION = "1.7.10";
-	public static final String VERSION = "1.1.0-" + MC_VERSION;
+	public static final String VERSION = "1.1.1-" + MC_VERSION;
 	public static final String ACCEPTED_MC_VERSIONS = "[" + MC_VERSION + "]";
 	public static final String DESC = "Adds chat command to kill all of a certain kind of entity";
 	public static final String URL = "";
@@ -86,6 +87,7 @@ public class KillAll {
 		event.registerServerCommand(new VerbEntityNameCommand("hoist", KillAll::hoistEntityToSenderFloor));
 		event.registerServerCommand(new VerbEntityNameCommand("vacuum", KillAll::vacuumEntityToSender));
 		event.registerServerCommand(new ListEntityCountCommand());
+		event.registerServerCommand(new ListEntityDetailsCommand());
 	}
 
 	private static double getFloorY(final ICommandSender sender, final double maxY, final double x, final double z) {

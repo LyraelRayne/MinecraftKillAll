@@ -20,13 +20,13 @@ import static au.lyrael.killall.command.CommandTargetMatchers.matchByName;
 import static au.lyrael.killall.utility.EntityListUtil.getLivingEntities;
 import static au.lyrael.killall.utility.EntityListUtil.getMatchingEntities;
 
-public class ListEntityCountCommand implements ICommand {
+public class ListEntityDetailsCommand implements ICommand {
 
 	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	@Override
 	public String getCommandName() {
-		return "countall";
+		return "listall";
 	}
 
 	@Override
@@ -49,25 +49,22 @@ public class ListEntityCountCommand implements ICommand {
 			final String matchString = args.length > 0 ? args[0] : "";
 
 			sender.addChatMessage(
-					new ChatComponentText(String.format("Counting entities which match [{}]", String.join(",", args)))
+					new ChatComponentText(String.format("Listing entities which match [%s]", String.join(",", args)))
 			);
-			LOGGER.info("Counting entities which match [{}]", String.join(",", args));
+			LOGGER.info("Listing entities which match [{}]", String.join(",", args));
 
 			final List<Entity> loadedEntityList = world.getLoadedEntityList();
 			final List<EntityLiving> livingEntities = getLivingEntities(loadedEntityList);
 			final List<EntityLiving> matchingEntities = getMatchingEntities(entity -> matchByName(matchString, entity), livingEntities);
 
-			final Map<String, Long> counts = matchingEntities.stream().
-					collect(Collectors.groupingBy(EntityListUtil::getEntityName, Collectors.counting()));
-
-			counts.entrySet().forEach(entry -> {
+			matchingEntities.forEach(matched -> {
 				sender.addChatMessage(
-						new ChatComponentText(String.format("%s -> %s", entry.getKey(), entry.getValue()))
+						new ChatComponentText(String.format("%s", matched.toString()))
 				);
-				LOGGER.info("{} => {}", entry.getKey(), entry.getValue());
+				LOGGER.info("{}", matched.toString());
 			});
-			sender.addChatMessage(new ChatComponentText(String.format("%s -> %s", "total", matchingEntities.size())));
-			LOGGER.info("Total => {}", matchingEntities.size());
+			sender.addChatMessage(new ChatComponentText(String.format("Count %s", matchingEntities.size())));
+			LOGGER.info("Count [{}]", matchingEntities.size());
 		}
 	}
 
